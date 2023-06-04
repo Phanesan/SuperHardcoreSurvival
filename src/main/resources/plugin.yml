@@ -1,0 +1,7 @@
+name: SuperHardcoreSurvival
+version: '${project.version}'
+main: org.phanesan.superhardcoresurvival.SuperHardcoreSurvival
+api-version: 1.19
+load: STARTUP
+authors: [Phanesan]
+description: Multiples opciones para gestionar un supervivencia hardcore
