@@ -67,7 +67,7 @@ public class onDeath implements Listener {
             case 1:
                 BanPlayer.banPlayer(player,
                         ColorText.translate("&4&l¡HAS MUERTO!\n&cReviviras en 10 Minutos"),
-                        10,main);
+                        600,main);
                 main.data.isHeavyRain = true;
                 break;
             case 2:
