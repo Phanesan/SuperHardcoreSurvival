@@ -2,13 +2,16 @@ package org.phanesan.superhardcoresurvival.utils;
 
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.phanesan.superhardcoresurvival.SuperHardcoreSurvival;
 
 import java.util.Date;
 
 public abstract class BanPlayer {
 
-    public static void banPlayer(Player player, String reason, long duration) {
+    public static void banPlayer(Player player, String reason, long duration, SuperHardcoreSurvival main) {
         BanList banList = Bukkit.getBanList(BanList.Type.NAME);
 
         if (duration <= 0) {
@@ -18,7 +21,14 @@ public abstract class BanPlayer {
             banList.addBan(player.getName(), reason, new Date(expiration), null);
         }
 
-        player.kickPlayer(reason);
+        BukkitRunnable run = new BukkitRunnable() {
+            @Override
+            public void run() {
+                player.kickPlayer(reason);
+            }
+        };
+
+        run.runTaskLater(main,80);
     }
 
 }

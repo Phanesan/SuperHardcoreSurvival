@@ -5,3 +5,6 @@ api-version: 1.19
 load: STARTUP
 authors: [Phanesan]
 description: Multiples opciones para gestionar un supervivencia hardcore
+commands:
+  superhardcoresurvival:
+    description: SuperHardcoreSurvival info
