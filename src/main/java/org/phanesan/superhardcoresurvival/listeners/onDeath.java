@@ -41,15 +41,8 @@ public class onDeath implements Listener {
          */
         int level = getPersistentData(player);
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                World worldPlayerDeath = player.getWorld();
-                for(int i = 0; i < 5; i++) {
-                    worldPlayerDeath.strikeLightningEffect(player.getLocation());
-                }
-            }
-        }.runTask(main);
+        World worldPlayerDeath = player.getWorld();
+        worldPlayerDeath.strikeLightningEffect(player.getLocation());
 
         switch(level) {
             case 0:
