@@ -1,37 +1,27 @@
 package org.phanesan.superhardcoresurvival;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.phanesan.superhardcoresurvival.commands.CommandMain;
 import org.phanesan.superhardcoresurvival.commands.TabCompleter;
-import org.phanesan.superhardcoresurvival.listeners.onDeath;
-import org.phanesan.superhardcoresurvival.listeners.onHeavyRain;
-import org.phanesan.superhardcoresurvival.listeners.onPlayerJoin;
-import org.phanesan.superhardcoresurvival.listeners.onWorldLoad;
+import org.phanesan.superhardcoresurvival.listeners.*;
 import org.phanesan.superhardcoresurvival.utils.ColorText;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.logging.Logger;
-
-import static org.bukkit.Bukkit.getWorld;
 
 public final class SuperHardcoreSurvival extends JavaPlugin {
 
     public SuperHardcoreSurvival superHardcoreSurvival = this;
     public static final String NAME_PLUGIN = "SuperHardcoreSurvival";
-    public static final String VERSION = "1.1-RELEASE";
+    public static final String VERSION = "1.2-RELEASE";
+    public static final int HEAVY_RAIN_TIME = 60*30;
     public static final NamespacedKey PLAYER_DEATH_LEVEL = new NamespacedKey("super_hardcore_survival","player_death_level");
     public static final NamespacedKey ELAPSED_TIME = new NamespacedKey("super_hardcore_survival","elapsed_time");
     public static final NamespacedKey MAX_TIME = new NamespacedKey("super_hardcore_survival","max_time");
@@ -59,10 +49,12 @@ public final class SuperHardcoreSurvival extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         heavyRain = new HeavyRain(this);
+
         getServer().getPluginManager().registerEvents(new onDeath(this),this);
         getServer().getPluginManager().registerEvents(new onHeavyRain(this),this);
         getServer().getPluginManager().registerEvents(new onPlayerJoin(),this);
-        getServer().getPluginManager().registerEvents(new onWorldLoad(this),this);
+        getServer().getPluginManager().registerEvents(new onServerLoad(this),this);
+        getServer().getPluginManager().registerEvents(new onSpawn(),this);
 
         getCommand("superhardcoresurvival").setExecutor(new CommandMain(this));
         getCommand("superhardcoresurvival").setTabCompleter(new TabCompleter());
@@ -71,6 +63,10 @@ public final class SuperHardcoreSurvival extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        setPersistentData(findArmorStand(this),data.ELAPSED_TIME,ELAPSED_TIME);
+        setPersistentData(findArmorStand(this),data.MAX_TIME,MAX_TIME);
+        setPersistentData(findArmorStand(this),data.isHeavyRain ? 1 : 0,HEAVYRAIN_ON);
+        logger.info(ColorText.translate("&aDatos guardados."));
     }
 
     public void setPersistentData(Entity entity, int value, NamespacedKey namespacedKey) {

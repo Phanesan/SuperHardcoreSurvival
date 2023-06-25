@@ -23,7 +23,19 @@ public class HeavyRain {
 
     public HeavyRain(SuperHardcoreSurvival main) {
         this.main = main;
+    }
 
+    public void getConfigWorlds() {
+        try {
+            this.overWorld = main.getServer().getWorld(main.configFile.getConfigFile().getString("heavyrain_world"));
+            this.nether = main.getServer().getWorld(main.configFile.getConfigFile().getString("heavyrain_world_nether"));
+            this.end = main.getServer().getWorld(main.configFile.getConfigFile().getString("heavyrain_world_the_end"));
+        } catch (Exception e) {
+            main.logger.warning("Algo fallo al detectar el mundo, revise si el nombre de los mundos esta correcto.");
+        }
+    }
+
+    public void start() {
         updateHeavyRain = new BukkitRunnable() {
 
             @Override
@@ -36,6 +48,8 @@ public class HeavyRain {
                     overWorld.setStorm(false);
                     main.data.isHeavyRain = false;
                     main.setPersistentData(main.findArmorStand(main),0,main.HEAVYRAIN_ON);
+                    main.setPersistentData(main.findArmorStand(main),0,main.ELAPSED_TIME);
+                    main.setPersistentData(main.findArmorStand(main),0,main.MAX_TIME);
                     stop();
                     return;
                 }
@@ -62,24 +76,13 @@ public class HeavyRain {
                 main.data.ELAPSED_TIME++;
             }
         };
-    }
 
-    public void getConfigWorlds() {
-        try {
-            this.overWorld = main.getServer().getWorld(main.configFile.getConfigFile().getString("heavyrain_world"));
-            this.nether = main.getServer().getWorld(main.configFile.getConfigFile().getString("heavyrain_world_nether"));
-            this.end = main.getServer().getWorld(main.configFile.getConfigFile().getString("heavyrain_world_the_end"));
-        } catch (Exception e) {
-            main.logger.warning("Algo fallo al detectar el mundo, revise si el nombre de los mundos esta correcto.");
-        }
-    }
-
-    public void start() {
         updateHeavyRain.runTaskTimer(main,0,20);
     }
 
     public void stop() {
         updateHeavyRain.cancel();
+        updateHeavyRain = null;
     }
 
     private String formatTimer(int seconds) {

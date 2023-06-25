@@ -17,14 +17,34 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
             case 1:
                 argsString.add("resetlevel");
                 argsString.add("resettimer");
+                argsString.add("setlevel");
                 break;
             case 2:
-                switch(args[0]) {
+                switch(args[0].toLowerCase()) {
                     case "resetlevel":
                         Collection<?> players = Bukkit.getServer().getOnlinePlayers();
                         for (Object p : players) {
                             argsString.add(((Player) p).getName());
                         }
+                        break;
+                    case "setlevel":
+                        players = Bukkit.getServer().getOnlinePlayers();
+                        for (Object p : players) {
+                            argsString.add(((Player) p).getName());
+                        }
+                        break;
+                }
+                break;
+            case 3:
+                switch(args[0].toLowerCase()) {
+                    case "setlevel":
+                        argsString.add("0");
+                        argsString.add("1");
+                        argsString.add("2");
+                        argsString.add("3");
+                        argsString.add("4");
+                        argsString.add("5");
+                        argsString.add("6");
                         break;
                 }
                 break;

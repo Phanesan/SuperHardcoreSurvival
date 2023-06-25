@@ -122,11 +122,11 @@ public class onDeath implements Listener {
 
                     for(Object p : players) {
                         Player player1 = (Player) p;
-                        player1.sendRawMessage(ColorText.translate("&7¡HEAVY RAIN ACTIVADA! (+20 Minutos)"));
+                        player1.sendRawMessage(ColorText.translate("&7¡HEAVY RAIN ACTIVADA! (+30 Minutos)"));
                         player1.playSound(player1,Sound.ENTITY_SKELETON_HORSE_DEATH,SoundCategory.MASTER,1,1);
                     }
 
-                    main.data.MAX_TIME+=1200;
+                    main.data.MAX_TIME+=SuperHardcoreSurvival.HEAVY_RAIN_TIME;
                     main.heavyRain.start();
                     main.setPersistentData(main.findArmorStand(main),1,main.HEAVYRAIN_ON);
                 }

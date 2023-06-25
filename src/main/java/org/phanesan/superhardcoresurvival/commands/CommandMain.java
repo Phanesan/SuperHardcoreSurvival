@@ -25,6 +25,9 @@ public class CommandMain implements CommandExecutor {
                 case "resettimer":
                     new ResetTimer(commandSender,plugin);
                     break;
+                case "setlevel":
+                    new SetLevel(plugin,commandSender,args);
+                    break;
                 default:
                     commandSender.sendMessage(ColorText.translate("&cComando desconocido."));
             }
