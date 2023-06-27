@@ -1,12 +1,12 @@
 package org.phanesan.superhardcoresurvival.listeners;
 
-import org.bukkit.entity.Creeper;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.Phantom;
-import org.bukkit.entity.Slime;
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.phanesan.superhardcoresurvival.SuperHardcoreSurvival;
@@ -33,6 +33,27 @@ public class onHeavyRain implements Listener {
                 case ZOMBIE:
                     ((Monster) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 9999*20, 3, false, false));
                     ((Monster) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 9999*20, 2, false, false));
+
+                    if(e.getEntityType() != EntityType.ENDERMAN && randomBoolean(30)) {
+                        LivingEntity entity = (LivingEntity) e.getEntity();
+                        entity.setGlowing(true);
+
+                        entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,9999*20,2,false,false));
+
+                        ItemStack helmet = new ItemStack(Material.DIAMOND_HELMET);
+                        helmet.addEnchantment(Enchantment.PROTECTION_PROJECTILE,4);
+                        ItemStack boots = new ItemStack(Material.GOLDEN_BOOTS);
+
+                        entity.getEquipment().setHelmet(helmet);
+                        entity.getEquipment().setBoots(boots);
+
+                        if(randomBoolean(5)) {
+                            ItemStack pickaxe = new ItemStack(Material.DIAMOND_PICKAXE);
+                            pickaxe.addUnsafeEnchantment(Enchantment.DIG_SPEED,8);
+                            entity.getEquipment().setItemInMainHand(pickaxe);
+                            entity.getEquipment().setItemInMainHandDropChance(1f);
+                        }
+                    }
                     break;
 
                 case SPIDER:
@@ -93,9 +114,12 @@ public class onHeavyRain implements Listener {
                     ((Monster) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 9999*20, 1, false, false));
                     break;
 
+                case HOGLIN:
+                    ((LivingEntity) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,PotionEffect.INFINITE_DURATION,1,false,false));
+                    break;
+
                 case SHULKER:
                 case ZOGLIN:
-                case HOGLIN:
                 case EVOKER:
                     ((Monster) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 9999*20, 1, false, false));
                     break;
@@ -115,6 +139,10 @@ public class onHeavyRain implements Listener {
                     break;
             }
         }
+    }
+
+    public boolean randomBoolean(double probability) {
+        return (Math.random()) < (probability/100);
     }
 
 }

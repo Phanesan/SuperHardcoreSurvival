@@ -29,6 +29,7 @@ public class onDeath implements Listener {
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
         Logger logger = main.logger;
+        boolean activateHeavyRain = false;
 
         /*
         Level 0: Sin cooldown
@@ -56,42 +57,43 @@ public class onDeath implements Listener {
                         }
                     }
                 }.runTaskTimer(main,0,3);
+                activateHeavyRain = true;
                 break;
             case 1:
                 BanPlayer.banPlayer(player,
                         ColorText.translate("&4&l¡HAS MUERTO!\n&cReviviras en 10 Minutos"),
                         600,main);
-                main.data.isHeavyRain = true;
+                activateHeavyRain = true;
                 break;
             case 2:
                 BanPlayer.banPlayer(player,
                         ColorText.translate("&4&l¡HAS MUERTO!\n&cReviviras en 30 Minutos."),
                         1800,main);
-                main.data.isHeavyRain = true;
+                activateHeavyRain = true;
                 break;
             case 3:
                 BanPlayer.banPlayer(player,
                         ColorText.translate("&4&l¡HAS MUERTO!\n&cReviviras en 1 Hora."),
                         3600,main);
-                main.data.isHeavyRain = true;
+                activateHeavyRain = true;
                 break;
             case 4:
                 BanPlayer.banPlayer(player,
                         ColorText.translate("&4&l¡HAS MUERTO!\n&cReviviras en 6 Horas."),
                         21600,main);
-                main.data.isHeavyRain = true;
+                activateHeavyRain = true;
                 break;
             case 5:
                 BanPlayer.banPlayer(player,
                         ColorText.translate("&4&l¡HAS MUERTO!\n&cReviviras en 18 Horas."),
                         64800,main);
-                main.data.isHeavyRain = true;
+                activateHeavyRain = true;
                 break;
             case 6:
                 BanPlayer.banPlayer(player,
                         ColorText.translate("&4&l¡HAS MUERTO!\n&cReviviras en 1 Dia."),
                         86400,main);
-                main.data.isHeavyRain = true;
+                activateHeavyRain = true;
                 break;
         }
 
@@ -114,7 +116,7 @@ public class onDeath implements Listener {
         };
         globalDeathTitle.runTask(main);
 
-        if(main.data.isHeavyRain) {
+        if(!main.data.isHeavyRain) {
             BukkitRunnable globalHeavyRainMessage = new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -122,16 +124,27 @@ public class onDeath implements Listener {
 
                     for(Object p : players) {
                         Player player1 = (Player) p;
-                        player1.sendRawMessage(ColorText.translate("&7¡HEAVY RAIN ACTIVADA! (+30 Minutos)"));
+                        player1.sendRawMessage(ColorText.translate("&7¡HEAVY RAIN ACTIVADA! (+40 Minutos)"));
                         player1.playSound(player1,Sound.ENTITY_SKELETON_HORSE_DEATH,SoundCategory.MASTER,1,1);
                     }
 
                     main.data.MAX_TIME+=SuperHardcoreSurvival.HEAVY_RAIN_TIME;
+                    main.data.isHeavyRain = true;
                     main.heavyRain.start();
                     main.setPersistentData(main.findArmorStand(main),1,main.HEAVYRAIN_ON);
                 }
             };
             globalHeavyRainMessage.runTaskLater(main,90);
+        } else {
+            Collection<?> players = main.getServer().getOnlinePlayers();
+
+            for(Object p : players) {
+                Player player1 = (Player) p;
+                player1.sendRawMessage(ColorText.translate("&7+40 Minutos de Heavy Rain"));
+                player1.playSound(player1,Sound.ENTITY_SKELETON_HORSE_DEATH,SoundCategory.MASTER,1,1);
+            }
+
+            main.data.MAX_TIME+=SuperHardcoreSurvival.HEAVY_RAIN_TIME;
         }
 
     }

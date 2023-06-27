@@ -13,7 +13,7 @@ public class onSpawn implements Listener {
     public void onSpawn(EntitySpawnEvent e) {
         e.getEntity().addScoreboardTag("overpowered");
         switch(e.getEntityType()) {
-
+            //  CAMBIO 1
             case SKELETON:
             case DROWNED:
             case HUSK:
@@ -23,6 +23,13 @@ public class onSpawn implements Listener {
                 ((Monster) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 9999*20, 2, false, false));
                 break;
 
+            //  CAMBIO 2
+            case PIGLIN:
+            case PIGLIN_BRUTE:
+                ((Monster) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 9999*20, 1, false, false));
+                ((Monster) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 9999*20, 2, false, false));
+                ((Monster) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 9999*20, 1, false, false));
+                break;
         }
     }
 

@@ -3,6 +3,7 @@ package org.phanesan.superhardcoresurvival;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -36,48 +37,54 @@ public class HeavyRain {
     }
 
     public void start() {
-        updateHeavyRain = new BukkitRunnable() {
 
-            @Override
-            public void run() {
-                getConfigWorlds();
+        if(updateHeavyRain == null) {
+            updateHeavyRain = new BukkitRunnable() {
 
-                if(main.data.ELAPSED_TIME >= main.data.MAX_TIME) {
-                    main.data.ELAPSED_TIME = 0;
-                    main.data.MAX_TIME = 0;
-                    overWorld.setStorm(false);
-                    main.data.isHeavyRain = false;
-                    main.setPersistentData(main.findArmorStand(main),0,main.HEAVYRAIN_ON);
-                    main.setPersistentData(main.findArmorStand(main),0,main.ELAPSED_TIME);
-                    main.setPersistentData(main.findArmorStand(main),0,main.MAX_TIME);
-                    stop();
-                    return;
+                @Override
+                public void run() {
+                    getConfigWorlds();
+
+                    if(main.data.ELAPSED_TIME >= main.data.MAX_TIME) {
+                        main.data.ELAPSED_TIME = 0;
+                        main.data.MAX_TIME = 0;
+                        overWorld.setStorm(false);
+                        main.data.isHeavyRain = false;
+                        main.setPersistentData(main.findArmorStand(main),0,main.HEAVYRAIN_ON);
+                        main.setPersistentData(main.findArmorStand(main),0,main.ELAPSED_TIME);
+                        main.setPersistentData(main.findArmorStand(main),0,main.MAX_TIME);
+                        stop();
+                        return;
+                    }
+
+                    overWorld.setStorm(true);
+                    overWorld.setThundering(true);
+
+                    Collection<?> players = Bukkit.getOnlinePlayers();
+                    for(Object p : players) {
+                        Player player = (Player) p;
+                        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ColorText.translate("&b"+formatTimer(main.data.MAX_TIME-main.data.ELAPSED_TIME))));
+                    }
+
+                    List<Player> playersInNether = nether.getPlayers();
+                    for(Player p : playersInNether) {
+                        p.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,20*5,0));
+                    }
+
+                    List<Player> playersInEnd = end.getPlayers();
+                    for(Player p : playersInEnd) {
+                        p.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,20*5,0));
+                    }
+
+                    main.data.ELAPSED_TIME++;
                 }
+            };
 
-                overWorld.setStorm(true);
-                overWorld.setThundering(true);
+            updateHeavyRain.runTaskTimer(main,0,20);
+        } else {
+            throw new RuntimeException("Ya hay un hilo ejecutandose");
+        }
 
-                Collection<?> players = Bukkit.getOnlinePlayers();
-                for(Object p : players) {
-                    Player player = (Player) p;
-                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ColorText.translate("&b"+formatTimer(main.data.MAX_TIME-main.data.ELAPSED_TIME))));
-                }
-
-                List<Player> playersInNether = nether.getPlayers();
-                for(Player p : playersInNether) {
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,20*5,0));
-                }
-
-                List<Player> playersInEnd = end.getPlayers();
-                for(Player p : playersInEnd) {
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS,20*5,0));
-                }
-
-                main.data.ELAPSED_TIME++;
-            }
-        };
-
-        updateHeavyRain.runTaskTimer(main,0,20);
     }
 
     public void stop() {
@@ -90,6 +97,10 @@ public class HeavyRain {
         int minutos = (seconds % 3600) / 60;
         int segundos = seconds % 60;
         return horas + ":" + minutos + ":" + segundos;
+    }
+
+    public boolean randomBoolean(double probability) {
+        return (Math.random()) < (probability/100);
     }
 
 }
