@@ -47,7 +47,7 @@ public class onHeavyRain implements Listener {
                         entity.getEquipment().setHelmet(helmet);
                         entity.getEquipment().setBoots(boots);
 
-                        if(randomBoolean(5)) {
+                        if(randomBoolean(3)) {
                             ItemStack pickaxe = new ItemStack(Material.DIAMOND_PICKAXE);
                             pickaxe.addUnsafeEnchantment(Enchantment.DIG_SPEED,8);
                             entity.getEquipment().setItemInMainHand(pickaxe);
