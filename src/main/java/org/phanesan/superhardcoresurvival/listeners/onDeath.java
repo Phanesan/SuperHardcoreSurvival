@@ -136,15 +136,22 @@ public class onDeath implements Listener {
             };
             globalHeavyRainMessage.runTaskLater(main,90);
         } else {
-            Collection<?> players = main.getServer().getOnlinePlayers();
+            BukkitRunnable globalHeavyRainMessage = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    Collection<?> players = main.getServer().getOnlinePlayers();
 
-            for(Object p : players) {
-                Player player1 = (Player) p;
-                player1.sendRawMessage(ColorText.translate("&7+40 Minutos de Heavy Rain"));
-                player1.playSound(player1,Sound.ENTITY_SKELETON_HORSE_DEATH,SoundCategory.MASTER,1,1);
-            }
+                    for(Object p : players) {
+                        Player player1 = (Player) p;
+                        player1.sendRawMessage(ColorText.translate("&7La Heavy Rain aumenta 40 minutos mas!"));
+                        player1.playSound(player1,Sound.ENTITY_SKELETON_HORSE_DEATH,SoundCategory.MASTER,1,1);
+                    }
 
-            main.data.MAX_TIME+=SuperHardcoreSurvival.HEAVY_RAIN_TIME;
+                    main.data.MAX_TIME+=SuperHardcoreSurvival.HEAVY_RAIN_TIME;
+                }
+            };
+
+            globalHeavyRainMessage.runTaskLater(main,90);
         }
 
     }

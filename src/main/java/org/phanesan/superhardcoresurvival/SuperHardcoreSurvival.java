@@ -55,6 +55,7 @@ public final class SuperHardcoreSurvival extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new onPlayerJoin(),this);
         getServer().getPluginManager().registerEvents(new onServerLoad(this),this);
         getServer().getPluginManager().registerEvents(new onSpawn(),this);
+        getServer().getPluginManager().registerEvents(new onPlayerWithLava(),this);
 
         getCommand("superhardcoresurvival").setExecutor(new CommandMain(this));
         getCommand("superhardcoresurvival").setTabCompleter(new TabCompleter());
