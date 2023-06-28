@@ -82,7 +82,7 @@ public class onHeavyRain implements Listener {
                     break;
 
                 case PHANTOM:
-                    ((Phantom) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 9999*20, 3, false, false));
+                    ((Phantom) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 9999*20, 6, false, false));
                     ((Phantom) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 9999*20, 1, false, false));
                     break;
 

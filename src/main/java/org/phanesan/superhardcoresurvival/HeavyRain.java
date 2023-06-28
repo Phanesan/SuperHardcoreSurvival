@@ -5,6 +5,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -64,6 +65,12 @@ public class HeavyRain {
                     for(Object p : players) {
                         Player player = (Player) p;
                         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ColorText.translate("&b"+formatTimer(main.data.MAX_TIME-main.data.ELAPSED_TIME))));
+
+                        if(player.getWorld() == overWorld && randomBoolean(2)) {
+                            overWorld.spawnEntity(new Location(overWorld,player.getLocation().getX(),
+                                                                overWorld.getHighestBlockYAt(player.getLocation())+60,
+                                                                player.getLocation().getZ()), EntityType.PHANTOM);
+                        }
                     }
 
                     List<Player> playersInNether = nether.getPlayers();
