@@ -21,7 +21,7 @@ public final class SuperHardcoreSurvival extends JavaPlugin {
     public SuperHardcoreSurvival superHardcoreSurvival = this;
     public static final String NAME_PLUGIN = "SuperHardcoreSurvival";
     public static final String VERSION = "1.4-RELEASE";
-    public static final int HEAVY_RAIN_TIME = 60*40;
+    public static final int HEAVY_RAIN_TIME = 60*50;
     public static final NamespacedKey PLAYER_DEATH_LEVEL = new NamespacedKey("super_hardcore_survival","player_death_level");
     public static final NamespacedKey ELAPSED_TIME = new NamespacedKey("super_hardcore_survival","elapsed_time");
     public static final NamespacedKey MAX_TIME = new NamespacedKey("super_hardcore_survival","max_time");

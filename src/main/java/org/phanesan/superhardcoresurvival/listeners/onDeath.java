@@ -124,7 +124,7 @@ public class onDeath implements Listener {
 
                     for(Object p : players) {
                         Player player1 = (Player) p;
-                        player1.sendRawMessage(ColorText.translate("&7¡HEAVY RAIN ACTIVADA! (+40 Minutos)"));
+                        player1.sendRawMessage(ColorText.translate("&7¡HEAVY RAIN ACTIVADA! (+50 Minutos)"));
                         player1.playSound(player1,Sound.ENTITY_SKELETON_HORSE_DEATH,SoundCategory.MASTER,1,1);
                     }
 
@@ -143,7 +143,7 @@ public class onDeath implements Listener {
 
                     for(Object p : players) {
                         Player player1 = (Player) p;
-                        player1.sendRawMessage(ColorText.translate("&7La Heavy Rain aumenta 40 minutos mas!"));
+                        player1.sendRawMessage(ColorText.translate("&7La Heavy Rain aumenta 50 minutos mas!"));
                         player1.playSound(player1,Sound.ENTITY_SKELETON_HORSE_DEATH,SoundCategory.MASTER,1,1);
                     }
 
