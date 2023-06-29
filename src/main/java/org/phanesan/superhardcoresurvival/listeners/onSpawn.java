@@ -1,19 +1,18 @@
 package org.phanesan.superhardcoresurvival.listeners;
 
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Monster;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
-import org.bukkit.event.world.AsyncStructureSpawnEvent;
+import org.bukkit.event.entity.EntityTransformEvent;
 import org.bukkit.event.world.ChunkPopulateEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.phanesan.superhardcoresurvival.Items;
 
-import java.util.Collection;
 
 public class onSpawn implements Listener {
 
@@ -54,7 +53,7 @@ public class onSpawn implements Listener {
 
                 break;
 
-                //  CAMBIO 3
+            //  CAMBIO 3
             case VINDICATOR:
                 ((Monster) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999*20, 1, false, false));
                 break;
@@ -69,6 +68,23 @@ public class onSpawn implements Listener {
                 ((Monster) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 9999*20, 2, false, false));
                 ((Monster) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 9999*20, 1, false, false));
                 break;
+
+            case WITHER:
+                ((Monster) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 9999*20, 3, false, false));
+                break;
+
+            case HOGLIN:
+            case ZOGLIN:
+                ((LivingEntity) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,PotionEffect.INFINITE_DURATION,1,false,false));
+                ((LivingEntity) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,PotionEffect.INFINITE_DURATION,2,false,false));
+                break;
+            case PIG:
+                if(randomBoolean(70)) {
+                    Entity hoglin = e.getEntity().getWorld().spawnEntity(e.getLocation(),EntityType.HOGLIN);
+                    hoglin.setPersistent(true);
+                    e.getEntity().teleport(e.getLocation().subtract(0,400,0));
+                }
+                break;
         }
     }
 
@@ -77,16 +93,39 @@ public class onSpawn implements Listener {
     public void onGenerateChunk(ChunkPopulateEvent e) {
         Entity[] entities = e.getChunk().getEntities();
         for(Entity entity : entities) {
-            if(entity.getType() == EntityType.PIGLIN_BRUTE && randomBoolean(7)) {
-                LivingEntity livingEntity = (LivingEntity) entity;
-                livingEntity.setGlowing(true);
+            EntityType entityType = entity.getType();
+            switch(entityType) {
+                case PIGLIN_BRUTE:
+                    if(randomBoolean(7)) {
+                        LivingEntity livingEntity = (LivingEntity) entity;
+                        livingEntity.setGlowing(true);
 
-                livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,PotionEffect.INFINITE_DURATION,3,false,false));
-                livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,PotionEffect.INFINITE_DURATION,3,false,false));
+                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, PotionEffect.INFINITE_DURATION, 3, false, false));
+                        livingEntity.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, PotionEffect.INFINITE_DURATION, 3, false, false));
 
-                livingEntity.getEquipment().setItemInOffHand(Items.getBookLife());
-                livingEntity.getEquipment().setItemInOffHandDropChance(0.6f);
+                        livingEntity.getEquipment().setItemInOffHand(Items.getBookLife());
+                        livingEntity.getEquipment().setItemInOffHandDropChance(0.6f);
+                    }
+                    break;
+                case PIG:
+                    if(randomBoolean(70)) {
+                        Entity hoglin = entity.getWorld().spawnEntity(entity.getLocation(),EntityType.HOGLIN);
+                        hoglin.setPersistent(true);
+                        entity.teleport(entity.getLocation().subtract(0,400,0));
+                    }
+                    break;
             }
+        }
+    }
+
+    @EventHandler
+    public void transformEntity(EntityTransformEvent e) {
+        if(e.getTransformedEntity() instanceof Zoglin) {
+            Zoglin zoglin = (Zoglin) e.getTransformedEntity();
+            zoglin.setGlowing(true);
+            zoglin.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,PotionEffect.INFINITE_DURATION,1,false,false));
+            zoglin.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,PotionEffect.INFINITE_DURATION,12,false,false));
+            zoglin.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,PotionEffect.INFINITE_DURATION,1,false,false));
         }
     }
 

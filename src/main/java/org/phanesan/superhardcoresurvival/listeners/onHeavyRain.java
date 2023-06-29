@@ -115,11 +115,18 @@ public class onHeavyRain implements Listener {
                     break;
 
                 case HOGLIN:
+                case ZOGLIN:
                     ((LivingEntity) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,PotionEffect.INFINITE_DURATION,1,false,false));
+                    ((LivingEntity) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,PotionEffect.INFINITE_DURATION,2,false,false));
+
+                    if(randomBoolean(8)) {
+                        e.getEntity().setGlowing(true);
+                        ((LivingEntity) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,PotionEffect.INFINITE_DURATION,12,false,false));
+                        ((LivingEntity) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.SLOW,PotionEffect.INFINITE_DURATION,1,false,false));
+                    }
                     break;
 
                 case SHULKER:
-                case ZOGLIN:
                 case EVOKER:
                     ((Monster) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 9999*20, 1, false, false));
                     break;
